@@ -6,3 +6,4 @@ Contributors:
  - Ivan Kirspu - Captain
  - Andrew Shmakov
  - Osipov Egor
+ - Kopylov Egor
