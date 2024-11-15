@@ -1,8 +1,10 @@
 import telebot
 from telebot.types import KeyboardButton, ReplyKeyboardMarkup
 
+import config
+
 # Инициализация бота
-bot = telebot.TeleBot('7802215334:AAHXnUEFTCrHQiniazQbrRZYECxYOHj6Ykc')
+bot = telebot.TeleBot(config.BOT_TOKEN)
 
 # Создание кнопки с запросом номера телефона
 contact_button = KeyboardButton(text="Отправить номер", request_contact=True)
