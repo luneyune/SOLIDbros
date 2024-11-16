@@ -76,7 +76,6 @@ class IntercomAPI:
         res_data = response.json()
 
         if response.status_code == 200:
-            print(res_data)
             return True
         
         return False
