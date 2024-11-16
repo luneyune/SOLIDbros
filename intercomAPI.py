@@ -60,3 +60,22 @@ class IntercomAPI:
             return intercoms
         else:
             raise ValidationError(f"No intercoms for {apartment_id}, {tenant_id}")
+    
+    def open_intercom(self, intercom_id, tenant_id, door_id=0):
+        url = f"https://domo-dev.profintel.ru/tg-bot/domo.domofon/{intercom_id}/open"
+
+        params = {
+            "tenant_id": tenant_id
+        }
+
+        payload = json.dumps({
+            "door_id": door_id
+        })
+
+        response = requests.request("POST", url, headers=self.headers, params=params, data=payload)
+        res_data = response.json()
+
+        if response.status_code == 200:
+            return True
+        
+        return False

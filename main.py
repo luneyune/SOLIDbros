@@ -64,7 +64,18 @@ def get_user_locations(message):
 # Обработчик текстовых сообщений
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    bot.send_message(message.from_user.id, message.text)
+    if message.text[:4] == "open":
+        tenant = dbManager.read_tenant(message.from_user.id)
+        if not tenant:
+            bot.send_message(message.from_user.id, f"У вас нет домофонов...")
+            return
+        tenant_id = tenant[0]
+        inter_id = int(message.text[5:])
+        is_open = interAPI.open_intercom(inter_id, tenant_id)
+        if is_open:
+            bot.send_message(message.from_user.id, f"Дверь успешно открыта")
+        else:
+            bot.send_message(message.from_user.id, f"Ошибка успешно открыта")
 
 @bot.message_handler(content_types=['contact'])
 def handle_contact(message):
