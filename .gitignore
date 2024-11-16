@@ -1,5 +1,5 @@
-config.py
 *.db
+config.py
 
 test
 test/*
@@ -8,6 +8,9 @@ test/*
 __pycache__/
 *.py[cod]
 *$py.class
+
+test
+test/*
 
 # C extensions
 *.so
