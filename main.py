@@ -3,8 +3,12 @@ from telebot.types import KeyboardButton, ReplyKeyboardMarkup
 
 from intercomAPI import *
 from dbManager import *
+from sqlite_setup import *
 
 import config
+
+# Инициализация БД на случай первого запуска
+db_setup()
 
 # Инициализация бота
 bot = telebot.TeleBot(config.BOT_TOKEN)
