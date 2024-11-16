@@ -1,5 +1,7 @@
 import telebot
 from telebot.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from flask import Flask, request, jsonify
+import threading
 
 from intercomAPI import *
 from dbManager import *
@@ -14,6 +16,30 @@ db_setup()
 bot = telebot.TeleBot(config.BOT_TOKEN)
 interAPI = IntercomAPI(config.DOM_API_TOKEN)
 dbManager = DBManager("users.db")
+
+api_app = Flask(__name__)
+# Базовый endpoint
+@api_app.route('/tgbot/call', methods=['GET'])
+def call_user():
+    # Извлекаем параметр "name" из URL
+    print(request)
+    inter_id = request.args["domofon_id"]
+    tenant_id = request.args["tenant_id"]
+
+    tenant = dbManager.read_tenant_by_ten_id(tenant_id)
+    if not tenant:
+        return jsonify({"message": "No such tenant registered"}), 422
+
+    tg_id = tenant[0]
+
+    image = interAPI.intercom_image(inter_id, tenant_id)
+    inter_actions_keyboard = InlineKeyboardMarkup(row_width=2)
+    open_button = InlineKeyboardButton(text="Открыть", callback_data=f"open {inter_id}")
+    refresh_button = InlineKeyboardButton(text="Обновить", callback_data=inter_id)
+    inter_actions_keyboard.row(open_button, refresh_button)
+
+    bot.send_photo(tg_id, image[0], reply_markup=inter_actions_keyboard)
+    return jsonify({"message": "Tenant has been called"}), 200
 
 # Создание кнопки с запросом номера телефона
 contact_button = KeyboardButton(text="Отправить номер", request_contact=True)
@@ -141,4 +167,7 @@ def handle_contact(message):
 
 
 # Запуск бота
+api_thread = threading.Thread(target=api_app.run)
+api_thread.start()
 bot.polling(none_stop=True)
+

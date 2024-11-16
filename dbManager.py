@@ -14,5 +14,9 @@ class DBManager:
         self.cursor.execute("SELECT tenant_id, phone_number FROM Users WHERE tg_id = ?",  (tg_id, ))
         return self.cursor.fetchone()
     
+    def read_tenant_by_ten_id(self, tenant_id):
+        self.cursor.execute("SELECT tg_id, phone_number FROM Users WHERE tenant_id = ?",  (tenant_id, ))
+        return self.cursor.fetchone()
+    
     def __del__(self):
         self.connection.close()
