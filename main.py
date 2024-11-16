@@ -76,6 +76,22 @@ def get_text_messages(message):
             bot.send_message(message.from_user.id, f"Дверь успешно открыта")
         else:
             bot.send_message(message.from_user.id, f"Ошибка успешно открыта")
+    
+    elif message.text[:5] == "image":
+        tenant = dbManager.read_tenant(message.from_user.id)
+        if not tenant:
+            bot.send_message(message.from_user.id, f"У вас нет домофонов...")
+            return
+        tenant_id = tenant[0]
+        inter_id = int(message.text[6:])
+
+        try:
+            img = interAPI.intercom_image(inter_id, tenant_id)
+        except ValidationError:
+            bot.send_message(message.from_user.id, f"Этот домофон вам недоступен")
+
+        bot.send_photo(message.from_user.id, img[0])
+
 
 @bot.message_handler(content_types=['contact'])
 def handle_contact(message):

@@ -59,7 +59,7 @@ class IntercomAPI:
             intercoms = [(inter["id"], inter["name"]) for inter in res_data]
             return intercoms
         else:
-            raise ValidationError(f"No intercoms for {apartment_id}, {tenant_id}")
+            raise ValidationError(f"No intercoms for {apartment_id=}, {tenant_id=}")
     
     def open_intercom(self, intercom_id, tenant_id, door_id=0):
         url = f"https://domo-dev.profintel.ru/tg-bot/domo.domofon/{intercom_id}/open"
@@ -76,6 +76,30 @@ class IntercomAPI:
         res_data = response.json()
 
         if response.status_code == 200:
+            print(res_data)
             return True
         
         return False
+    
+    def intercom_image(self, intercom_id, tenant_id):
+        url = f"https://domo-dev.profintel.ru/tg-bot/domo.domofon/urlsOnType"
+
+        params = {
+            "tenant_id": tenant_id
+        }
+
+        payload = json.dumps({
+            "intercoms_id": [
+                intercom_id
+            ],
+            "media_type": [
+                "JPEG"
+            ]
+        })
+
+        response = requests.request("POST", url, headers=self.headers, params=params, data=payload)
+        res_data = response.json()
+        if response.status_code == 200:
+            return (res_data[0]["jpeg"], res_data[0]["alt_jpeg"])
+        else:
+            raise ValidationError(f"No JPEG for {intercom_id=}")
