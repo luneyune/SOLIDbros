@@ -12,5 +12,11 @@ def db_setup():
                 phone_number TEXT
                 )    
     ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS TokenKeys (
+                   id INTEGER PRIMARY KEY,
+                   x_api_key TEXT)
+                   ''')
     conn.commit()
     conn.close()

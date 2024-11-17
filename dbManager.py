@@ -6,8 +6,9 @@ class DBManager:
         self.cursor = self.connection.cursor()
     
     def write_tenant(self, tg_id, tenant_id, phone_number):
-        self.cursor.execute("UPDATE Users SET tenant_id = ?, phone_number = ? WHERE tg_id = ?", (tenant_id, phone_number, tg_id))
-        self.cursor.execute("INSERT OR IGNORE INTO Users (tg_id, tenant_id, phone_number) VALUES (?, ?, ?)", (tg_id, tenant_id, phone_number))
+        if not self.read_tenant(tg_id):
+            self.cursor.execute("INSERT OR IGNORE INTO Users (tg_id, tenant_id, phone_number) VALUES (?, ?, ?)", (tg_id, tenant_id, phone_number))
+
         self.connection.commit()
 
     def read_tenant(self, tg_id):
@@ -18,5 +19,9 @@ class DBManager:
         self.cursor.execute("SELECT tg_id, phone_number FROM Users WHERE tenant_id = ?",  (tenant_id, ))
         return self.cursor.fetchone()
     
+    def get_hashed_api_key(self):
+        self.cursor.execute("SELECT x_api_key FROM TokenKeys")
+        return self.cursor.fetchone()[0]
+
     def __del__(self):
         self.connection.close()

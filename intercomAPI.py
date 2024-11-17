@@ -40,8 +40,8 @@ class IntercomAPI:
         res_data = response.json()
 
         if response.status_code == 200:
-            location_ids = [loc["id"] for loc in res_data]
-            return location_ids
+            locations = [(loc["id"], f"{loc["location"]["readable_address"]} кв. {loc["location"]["apartments_number"]}") for loc in res_data]
+            return locations
         else:
             raise ValidationError(f"No apartments for {tenant_id}")
 
