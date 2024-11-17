@@ -4,7 +4,7 @@ import random
 from sqlite_setup import *
 
 def get_hashed_pasword(plain_text_password):
-    return bcrypt.hashpw(plain_text_password, bcrypt.gensalt())
+    return bcrypt.hashpw(bytes(plain_text_password, "utf-8"), bcrypt.gensalt())
 
 db_setup()
 

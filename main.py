@@ -76,8 +76,7 @@ def call_user():
 
     token = request.headers["x-api-key"]
     hashed_token = dbManager.get_hashed_api_key()
-
-    if not bcrypt.checkpw(token, hashed_token):
+    if not bcrypt.checkpw(bytes(token, "utf-8"), hashed_token):
         return ({"message": "Forbidden"}), 403
 
     # Извлекаем параметр "name" из URL
