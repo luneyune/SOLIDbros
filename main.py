@@ -158,13 +158,13 @@ def handle_contact(message):
 
     try:
         tenant_id = interAPI.check_tenant(user_phone_number)
-        apartments_menu(message.chat.id)
     except ValidationError:
         bot.send_message(message.chat.id, "Вы не зарегистрированы в нашей системе!")
         return
 
     dbManager.write_tenant(message.from_user.id, tenant_id, user_phone_number)
     bot.send_message(message.chat.id, f"Спасибо! Вы успешно вошли в систему!")
+    apartments_menu(message.chat.id)
     bot.send_message(message.chat.id, text="Выберите действие", reply_markup=actions_keyboard)
 
 # Запуск бота
