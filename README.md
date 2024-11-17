@@ -40,6 +40,7 @@ docker run -d -p 5000:5000 --name solid-container image
 ```
 
 После запуска приложения API endpoint будет доступен по URL: htttp://127.0.0.1:5000/tgbot/call
+
 Для использования API endpoint требуется осуществить GET-запрос с query-параметрами: 
  - domofon_id - id домофона
  - tenant_id - id жильца
