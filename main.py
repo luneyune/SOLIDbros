@@ -154,7 +154,7 @@ def get_text_messages(message):
 @bot.message_handler(content_types=['contact'])
 def handle_contact(message):
     # Получаем номер телефона из сообщения
-    user_phone_number = message.contact.phone_number[1:]
+    user_phone_number = message.contact.phone_number
 
     try:
         tenant_id = interAPI.check_tenant(user_phone_number)
