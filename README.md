@@ -12,8 +12,9 @@ Contributors:
 # Инструкция по запуску телеграм-бота по управлению домофонами
 Необходимые библиотеки (должны установиться автоматически):
 - pyTelegramBotAPI
-- requests
 - Flask
+- Requests
+- py-bcrypt
 
 В файле config.py в переменные BOT_TOKEN и DOM_API_TOKEN нужно занести электронный ключ бота (если его ещё нет) и "SecretToken" соответственно.
 
